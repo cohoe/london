@@ -1,5 +1,4 @@
 import os
-import time
 import london.util
 import requests
 from barbados.services.logging import Log
@@ -27,4 +26,12 @@ class BaseImporter:
         response = requests.post(url=endpoint, json=data, headers=headers)
 
         if response.status_code != 200:
+            raise requests.HTTPError(response.text)
+
+    @staticmethod
+    def delete(endpoint):
+        Log.info("Performing DELETE against %s" % endpoint)
+        response = requests.delete(url=endpoint)
+
+        if response.status_code >= 400:
             raise requests.HTTPError(response.text)

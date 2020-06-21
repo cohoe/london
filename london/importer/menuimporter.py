@@ -10,12 +10,13 @@ class MenuImporter(BaseImporter):
     kind = 'menus'
     model = MenuModel
 
-    def import_(self, filepath):
+    def import_(self, filepath, baseurl):
         data = MenuImporter._fetch_data_from_path(filepath)
 
         Log.info("Starting import")
-        endpoint = "http://localhost:8080/api/v1/menus/"
-        # endpoint = "https://jamaica-amari.cs.house/api/v1/menus/"
+        endpoint = "%s/api/v1/menus/" % baseurl
+
+        self.delete(endpoint)
 
         for menu in data:
             m = MenuFactory.raw_to_obj(menu)

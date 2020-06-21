@@ -8,15 +8,16 @@ from barbados.serializers import ObjectSerializer
 class IngredientImporter(BaseImporter):
     kind = 'ingredients'
 
-    def import_(self, filepath):
+    def import_(self, filepath, baseurl):
         data = IngredientImporter._fetch_data_from_path(filepath)
 
         Log.info("Starting import")
 
-        # endpoint = "https://jamaica-amari.cs.house/api/v1/ingredients/"
-        endpoint = "http://localhost:8080/api/v1/ingredients/"
+        endpoint = "%s/api/v1/ingredients/" % baseurl
 
         retries = []
+
+        self.delete(endpoint)
 
         for ingredient in data:
             i = Ingredient(**ingredient)

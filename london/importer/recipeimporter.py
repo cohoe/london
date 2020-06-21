@@ -9,12 +9,13 @@ from barbados.serializers import ObjectSerializer
 class RecipeImporter(BaseImporter):
     kind = 'recipes'
 
-    def import_(self, filepath):
+    def import_(self, filepath, baseurl):
         data = RecipeImporter._fetch_data_from_path(filepath)
 
         Log.info('Starting import')
-        # endpoint = "https://jamaica-amari.cs.house/api/v1/cocktails/"
-        endpoint = "http://localhost:8080/api/v1/cocktails/"
+        endpoint = "%s/api/v1/cocktails/" % baseurl
+
+        self.delete(endpoint)
 
         for cocktail in data:
             try:

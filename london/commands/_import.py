@@ -12,7 +12,7 @@ class Import:
         args = self._setup_args()
         self._validate_args(args)
 
-        Importer.get_importer(args.object).import_(args.filepath)
+        Importer.get_importer(args.object).import_(args.filepath, baseurl=args.baseurl)
 
     @staticmethod
     def _setup_args():
@@ -20,6 +20,7 @@ class Import:
                                          usage='london import <object> <recipepath>')
         parser.add_argument('object', help='object to import', choices=Importer.supported_importers())
         parser.add_argument('filepath', help='path to the yaml file (or directory) containing the objects')
+        parser.add_argument('-b', '--baseurl', dest='baseurl', help='base api host', default='http://localhost:8080')
 
         return parser.parse_args(sys.argv[2:])
 
