@@ -3,10 +3,7 @@ from barbados.services.logging import Log
 from barbados.factories import MenuFactory
 from barbados.models import MenuModel
 from barbados.serializers import ObjectSerializer
-from barbados.indexers import indexer_factory
-from barbados.validators import ObjectValidator
-from barbados.indexes import index_factory, MenuIndex
-from barbados.caches import MenuScanCache
+from requests.exceptions import HTTPError
 
 
 class MenuImporter(BaseImporter):
@@ -16,36 +13,16 @@ class MenuImporter(BaseImporter):
     def import_(self, filepath):
         data = MenuImporter._fetch_data_from_path(filepath)
 
-        # Delete old data
-        self.delete()
-
         Log.info("Starting import")
+        endpoint = "http://localhost:8080/api/v1/menus/"
+        # endpoint = "https://jamaica-amari.cs.house/api/v1/menus/"
+
         for menu in data:
             m = MenuFactory.raw_to_obj(menu)
-            db_obj = MenuModel(**ObjectSerializer.serialize(m, 'dict'))
 
-            # Test for existing
-            with self.pgconn.get_session() as session:
-                session.add(db_obj)
-                indexer_factory.get_indexer(m).index(m)
-
-        # Validate
-        self.validate()
-
-        # Clear Cache and Index
-        MenuScanCache.invalidate()
-
-    def delete(self):
-        Log.debug("Deleting old data from database")
-        with self.pgconn.get_session() as session:
-            deleted = session.query(self.model).delete()
-
-        Log.info("Deleted %s" % deleted)
-        index_factory.rebuild(MenuIndex)
-
-    def validate(self):
-        Log.info("Validating")
-        with self.pgconn.get_session() as session:
-            objects = session.query(self.model).all()
-            for db_obj in objects:
-                ObjectValidator.validate(db_obj, session=session, fatal=False)
+            try:
+                Log.info("Attempting %s" % m.slug)
+                self.post(endpoint=endpoint, data=ObjectSerializer.serialize(m, 'dict'))
+                Log.info("Successful %s" % m.slug)
+            except HTTPError as e:
+                Log.warning("Failed %s: %s, attempting retry." % (m.slug, e))

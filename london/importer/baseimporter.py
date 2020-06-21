@@ -28,6 +28,3 @@ class BaseImporter:
 
         if response.status_code != 200:
             raise requests.HTTPError(response.text)
-
-        # I may regret this
-        time.sleep(.1)

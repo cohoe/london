@@ -13,8 +13,8 @@ class IngredientImporter(BaseImporter):
 
         Log.info("Starting import")
 
-        endpoint = "https://jamaica-amari.cs.house/api/v1/ingredients/"
-        # endpoint = "http://localhost:8080/api/v1/ingredients/"
+        # endpoint = "https://jamaica-amari.cs.house/api/v1/ingredients/"
+        endpoint = "http://localhost:8080/api/v1/ingredients/"
 
         retries = []
 
