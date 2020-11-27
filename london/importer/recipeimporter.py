@@ -4,6 +4,7 @@ from barbados.text import Slug
 from barbados.factories import CocktailFactory
 from barbados.services.logging import Log
 from barbados.serializers import ObjectSerializer
+from barbados.exceptions import ValidationException
 
 
 class RecipeImporter(BaseImporter):
@@ -17,6 +18,8 @@ class RecipeImporter(BaseImporter):
 
         self.delete(endpoint)
 
+        problems = []
+
         for cocktail in data:
             try:
                 slug = Slug(cocktail['display_name'])
@@ -27,6 +30,12 @@ class RecipeImporter(BaseImporter):
                 Log.error(cocktail)
                 Log.error(e)
                 continue
+            except ValidationException as e:
+                Log.error("Recipe failed validation")
+                Log.error(cocktail)
+                Log.error(e)
+                problems.append({'slug': slug, 'error': e})
+                continue
 
             try:
                 Log.info("Attempting %s" % c.slug)
@@ -34,3 +43,9 @@ class RecipeImporter(BaseImporter):
                 Log.info("Successful %s" % c.slug)
             except HTTPError as e:
                 Log.warning("Failed %s: %s, attempting retry." % (c.slug, e))
+                problems.append({'slug': c.slug, 'error': e})
+
+        print('Problems:')
+        [print(p.get('slug'), p.get('error')) for p in problems]
+
+        exit(len(problems))
