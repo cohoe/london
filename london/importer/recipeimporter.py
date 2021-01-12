@@ -10,13 +10,14 @@ from barbados.exceptions import ValidationException
 class RecipeImporter(BaseImporter):
     kind = 'recipes'
 
-    def import_(self, filepath, baseurl):
+    def import_(self, filepath, baseurl, delete):
         data = RecipeImporter._fetch_data_from_path(filepath)
 
         Log.info('Starting import')
         endpoint = "%s/api/v1/cocktails/" % baseurl
 
-        self.delete(endpoint)
+        if delete:
+            self.delete(endpoint)
 
         problems = []
 

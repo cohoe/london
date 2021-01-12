@@ -8,7 +8,7 @@ from barbados.serializers import ObjectSerializer
 class IngredientImporter(BaseImporter):
     kind = 'ingredients'
 
-    def import_(self, filepath, baseurl):
+    def import_(self, filepath, baseurl, delete):
         data = IngredientImporter._fetch_data_from_path(filepath)
 
         Log.info("Starting import")
@@ -17,7 +17,8 @@ class IngredientImporter(BaseImporter):
 
         retries = []
 
-        self.delete(endpoint)
+        if delete:
+            self.delete(endpoint)
 
         for ingredient in data:
             i = Ingredient(**ingredient)
