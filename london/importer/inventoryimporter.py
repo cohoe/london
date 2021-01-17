@@ -1,7 +1,7 @@
 from .baseimporter import BaseImporter
-from barbados.services.logging import Log
+from barbados.services.logging import LogService
 from barbados.factories.inventoryfactory import InventoryFactory
-from barbados.models import InventoryModel
+from barbados.models.inventory import InventoryModel
 from barbados.serializers import ObjectSerializer
 from requests.exceptions import HTTPError
 
@@ -14,7 +14,7 @@ class InventoryImporter(BaseImporter):
     def import_(self, filepath, baseurl):
         data = self._fetch_data_from_path(filepath)
 
-        Log.info("Starting import")
+        LogService.info("Starting import")
         endpoint = "%s/api/v1/inventories/" % baseurl
 
         self.delete(endpoint)
@@ -23,8 +23,8 @@ class InventoryImporter(BaseImporter):
             m = self.factory.raw_to_obj(item)
 
             try:
-                Log.info("Attempting %s" % filepath)
+                LogService.info("Attempting %s" % filepath)
                 self.post(endpoint=endpoint, data=ObjectSerializer.serialize(m, 'dict'))
-                Log.info("Successful %s" % filepath)
+                LogService.info("Successful %s" % filepath)
             except HTTPError as e:
-                Log.warning("Failed %s: %s, attempting retry." % (filepath, e))
+                LogService.warning("Failed %s: %s, attempting retry." % (filepath, e))

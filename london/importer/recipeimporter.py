@@ -1,8 +1,8 @@
 from requests import HTTPError
 from .baseimporter import BaseImporter
-from barbados.text import Slug
+from barbados.objects.text import Slug
 from barbados.factories import CocktailFactory
-from barbados.services.logging import Log
+from barbados.services.logging import LogService
 from barbados.serializers import ObjectSerializer
 from barbados.exceptions import ValidationException
 
@@ -13,7 +13,7 @@ class RecipeImporter(BaseImporter):
     def import_(self, filepath, baseurl, delete):
         data = RecipeImporter._fetch_data_from_path(filepath)
 
-        Log.info('Starting import')
+        LogService.info('Starting import')
         endpoint = "%s/api/v1/cocktails/" % baseurl
 
         if delete:
@@ -24,26 +24,26 @@ class RecipeImporter(BaseImporter):
         for cocktail in data:
             try:
                 slug = Slug(cocktail['display_name'])
-                Log.info("Working %s" % slug)
+                LogService.info("Working %s" % slug)
                 c = CocktailFactory.raw_to_obj(cocktail, slug)
             except KeyError as e:
-                Log.error("Something has bad data!")
-                Log.error(cocktail)
-                Log.error(e)
+                LogService.error("Something has bad data!")
+                LogService.error(cocktail)
+                LogService.error(e)
                 continue
             except ValidationException as e:
-                Log.error("Recipe failed validation")
-                Log.error(cocktail)
-                Log.error(e)
+                LogService.error("Recipe failed validation")
+                LogService.error(cocktail)
+                LogService.error(e)
                 problems.append({'slug': slug, 'error': e})
                 continue
 
             try:
-                Log.info("Attempting %s" % c.slug)
+                LogService.info("Attempting %s" % c.slug)
                 self.post(endpoint=endpoint, data=ObjectSerializer.serialize(c, 'dict'))
-                Log.info("Successful %s" % c.slug)
+                LogService.info("Successful %s" % c.slug)
             except HTTPError as e:
-                Log.warning("Failed %s: %s, attempting retry." % (c.slug, e))
+                LogService.warning("Failed %s: %s, attempting retry." % (c.slug, e))
                 problems.append({'slug': c.slug, 'error': e})
 
         print('Problems:')

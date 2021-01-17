@@ -1,7 +1,7 @@
 import os
 import london.util
 import requests
-from barbados.services.logging import Log
+from barbados.services.logging import LogService
 
 
 class BaseImporter:
@@ -30,7 +30,7 @@ class BaseImporter:
 
     @staticmethod
     def delete(endpoint):
-        Log.info("Performing DELETE against %s" % endpoint)
+        LogService.info("Performing DELETE against %s" % endpoint)
         response = requests.delete(url=endpoint)
 
         if response.status_code >= 400:
