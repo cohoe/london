@@ -11,13 +11,14 @@ class InventoryImporter(BaseImporter):
     model = InventoryModel
     factory = InventoryFactory
 
-    def import_(self, filepath, baseurl):
+    def import_(self, filepath, baseurl, delete):
         data = self._fetch_data_from_path(filepath)
 
         LogService.info("Starting import")
         endpoint = "%s/api/v1/inventories/" % baseurl
 
-        self.delete(endpoint)
+        if delete:
+            self.delete(endpoint)
 
         for item in data:
             m = self.factory.raw_to_obj(item)
