@@ -1,5 +1,5 @@
 from .ingredientimporter import IngredientImporter
-from .menuimporter import MenuImporter
+from .drinklistimporter import DrinkListImporter
 from .recipeimporter import RecipeImporter
 from .inventoryimporter import InventoryImporter
 
@@ -21,6 +21,6 @@ class Importer:
 
 
 Importer.register_importer(IngredientImporter)
-Importer.register_importer(MenuImporter)
+Importer.register_importer(DrinkListImporter)
 Importer.register_importer(RecipeImporter)
 Importer.register_importer(InventoryImporter)
