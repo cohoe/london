@@ -8,5 +8,11 @@ london.egg-info/top_level.txt
 london/cli/__init__.py
 london/commands/__init__.py
 london/commands/_import.py
+london/importer/__init__.py
+london/importer/baseimporter.py
+london/importer/drinklistimporter.py
+london/importer/ingredientimporter.py
+london/importer/inventoryimporter.py
+london/importer/recipeimporter.py
 london/util/__init__.py
 scripts/london

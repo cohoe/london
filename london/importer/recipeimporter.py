@@ -20,16 +20,18 @@ class RecipeImporter(BaseImporter):
             self.delete(endpoint)
 
         problems = []
+        count = 0
 
         for cocktail in data:
+            slug = Slug(cocktail['display_name'])
             try:
-                slug = Slug(cocktail['display_name'])
                 LogService.info("Working %s" % slug)
                 c = CocktailFactory.raw_to_obj(cocktail, slug)
             except KeyError as e:
                 LogService.error("Something has bad data!")
                 LogService.error(cocktail)
                 LogService.error(e)
+                problems.append({'slug': slug, 'error': e})
                 continue
             except ValidationException as e:
                 LogService.error("Recipe failed validation")
@@ -41,12 +43,15 @@ class RecipeImporter(BaseImporter):
             try:
                 LogService.info("Attempting %s" % c.slug)
                 self.post(endpoint=endpoint, data=ObjectSerializer.serialize(c, 'dict'))
+                count += 1
                 LogService.info("Successful %s" % c.slug)
             except HTTPError as e:
                 LogService.warning("Failed %s: %s, attempting retry." % (c.slug, e))
                 problems.append({'slug': c.slug, 'error': e})
 
-        print('Problems:')
+        print("Success count: %i" % count)
+        print("Problems count: %i" % len(problems))
+
         [print(p.get('slug'), p.get('error')) for p in problems]
 
         exit(len(problems))
