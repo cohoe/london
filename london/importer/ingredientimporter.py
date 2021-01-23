@@ -42,6 +42,7 @@ class IngredientImporter(BaseImporter):
                 LogService.error("Failed %s: %s" % (i.slug, e))
                 counts['fail'] += 1
 
+        LogService.info("Found %i items to add." % len(data))
         LogService.info("Successfully added %i to the database." % counts['success'])
         LogService.info("Failed to add %i to the database." % counts['fail'])
 
