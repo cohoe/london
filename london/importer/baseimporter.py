@@ -21,12 +21,24 @@ class BaseImporter:
             return london.util.load_yaml_data_from_path(filepath)
 
     @staticmethod
-    def post(endpoint, data):
+    def post(endpoint, data=None):
         headers = {}
         response = requests.post(url=endpoint, json=data, headers=headers)
 
         if response.status_code != 200:
             raise requests.HTTPError(response.text)
+
+    @staticmethod
+    def get(endpoint, parameters=None):
+        if parameters is None:
+            parameters = {}
+        headers = {}
+        response = requests.get(url=endpoint, headers=headers, params=parameters)
+
+        if response.status_code != 200:
+            raise requests.HTTPError(response.text)
+
+        return response.json()
 
     @staticmethod
     def delete(endpoint):
