@@ -3,6 +3,7 @@ from london.importer.baseimporter import BaseImporter
 from barbados.services.logging import LogService
 from barbados.objects.ingredient import Ingredient
 from barbados.serializers import ObjectSerializer
+from barbados.factories.ingredientfactory import IngredientFactory
 
 
 class IngredientImporter(BaseImporter):
@@ -25,7 +26,8 @@ class IngredientImporter(BaseImporter):
             self.delete(endpoint)
 
         for ingredient in data:
-            i = Ingredient(**ingredient)
+            # i = Ingredient(**ingredient)
+            i = IngredientFactory.raw_to_obj(ingredient)
             try:
                 self._perform_post(endpoint, i)
                 counts['success'] += 1
