@@ -3,7 +3,6 @@ import sys
 import requests
 import requests.exceptions
 import london.util
-import json
 
 
 class Ingredient:
