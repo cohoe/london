@@ -14,7 +14,7 @@ class RecipeImporter(BaseImporter):
         data = RecipeImporter._fetch_data_from_path(filepath)
 
         LogService.info('Starting import')
-        endpoint = "%s/api/v1/cocktails/" % baseurl
+        endpoint = "%s/api/v1/cocktails" % baseurl
 
         if delete:
             self.delete(endpoint)

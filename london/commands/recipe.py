@@ -15,7 +15,7 @@ class Recipe:
         args = self._setup_args()
         self._validate_args(args)
 
-        endpoint = "http://localhost:8080/api/v1/cocktails/"
+        endpoint = "http://localhost:8080/api/v1/cocktails"
 
         if args.action == 'create':
             self._create(endpoint, args)

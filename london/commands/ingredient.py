@@ -14,7 +14,7 @@ class Ingredient:
         args = self._setup_args()
         self._validate_args(args)
 
-        endpoint = "http://localhost:8080/api/v1/ingredients/"
+        endpoint = "http://localhost:8080/api/v1/ingredients"
 
         if args.action == 'create':
             self._create(endpoint, args)
