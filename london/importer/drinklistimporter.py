@@ -14,7 +14,7 @@ class DrinkListImporter(BaseImporter):
         data = DrinkListImporter._fetch_data_from_path(filepath)
 
         LogService.info("Starting import")
-        endpoint = "%s/api/v1/drinklists/" % baseurl
+        endpoint = "%s/api/v1/drinklists" % baseurl
 
         if delete:
             self.delete(endpoint)

@@ -15,7 +15,7 @@ class InventoryImporter(BaseImporter):
         data = self._fetch_data_from_path(filepath)
 
         LogService.info("Starting import")
-        endpoint = "%s/api/v1/inventories/" % baseurl
+        endpoint = "%s/api/v1/inventories" % baseurl
 
         if delete:
             self.delete(endpoint)
