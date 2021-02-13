@@ -18,8 +18,8 @@ class IngredientImporter(BaseImporter):
 
         retries = []
         counts = {
-            'success': 0,
-            'fail': 0
+            'success': [],
+            'fail': []
         }
 
         if delete:
@@ -30,7 +30,7 @@ class IngredientImporter(BaseImporter):
             i = IngredientFactory.raw_to_obj(ingredient)
             try:
                 self._perform_post(endpoint, i)
-                counts['success'] += 1
+                counts['success'].append(i)
             except requests.HTTPError as e:
                 LogService.warning("Failed %s: %s, attempting retry." % (i.slug, e))
                 retries.append(i)
@@ -39,14 +39,15 @@ class IngredientImporter(BaseImporter):
         for i in retries:
             try:
                 self._perform_post(endpoint, i)
-                counts['success'] += 1
+                counts['success'].append(i)
             except requests.HTTPError as e:
-                LogService.error("Failed %s: %s" % (i.slug, e))
-                counts['fail'] += 1
+                LogService.error("Failed 2nd attempt on %s: %s" % (i.slug, e))
+                counts['fail'].append(i)
 
         LogService.info("Found %i items to add." % len(data))
-        LogService.info("Successfully added %i to the database." % counts['success'])
-        LogService.info("Failed to add %i to the database." % counts['fail'])
+        LogService.info("Successfully added %i to the database." % len(counts['success']))
+        LogService.info("Failed to add %i to the database." % len(counts['fail']))
+        [LogService.error("Failed to add %s" % i.slug) for i in counts.get('fail')]
 
         # Refresh all indexes
         self._refresh_indexes(endpoint=endpoint)
