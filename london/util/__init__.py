@@ -111,6 +111,10 @@ def find_all_files(path, extension=None):
     :return:
     """
     file_paths = []
+
+    if os.path.isfile(path):
+        file_paths.append(path)
+
     for root, dirs, files in os.walk(path):
         for file in files:
             if extension:
@@ -129,4 +133,6 @@ def load_yaml_data_from_path(path, extension='.yaml'):
         data = read_yaml_file(file)
         result_data += data
 
+    if not result_data:
+        raise Exception("No results found?")
     return result_data
