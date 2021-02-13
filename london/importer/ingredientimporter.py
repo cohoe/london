@@ -14,7 +14,7 @@ class IngredientImporter(BaseImporter):
 
         LogService.info("Starting import")
 
-        endpoint = "%s/api/v1/ingredients/" % baseurl
+        endpoint = "%s/api/v1/ingredients" % baseurl
 
         retries = []
         counts = {
@@ -53,7 +53,7 @@ class IngredientImporter(BaseImporter):
 
     def _refresh_indexes(self, endpoint):
         # @TODO need a sane library to make URLs without double slashes.
-        search_url = endpoint + 'search'
+        search_url = "%s/search" % endpoint
 
         parameters = {'kind': 'index'}
 
@@ -62,7 +62,7 @@ class IngredientImporter(BaseImporter):
 
         for result in search_results:
             slug = result.get('slug')
-            refresh_endpoint = "%s%s/refresh" % (endpoint, slug)
+            refresh_endpoint = "%s/%s/refresh" % (endpoint, slug)
             LogService.info("Refreshing index %s" % slug)
             self.post(refresh_endpoint)
 

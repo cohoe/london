@@ -35,7 +35,7 @@ class Recipe:
         return self._handle_error(result)
 
     def _delete(self, endpoint, args):
-        result = requests.delete("%s%s" % (endpoint, args.slug))
+        result = requests.delete("%s/%s" % (endpoint, args.slug))
         return self._handle_error(result)
 
     def _handle_error(self, result):
