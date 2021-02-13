@@ -2,6 +2,7 @@ from .ingredientimporter import IngredientImporter
 from .drinklistimporter import DrinkListImporter
 from .recipeimporter import RecipeImporter
 from .inventoryimporter import InventoryImporter
+from .constructionimporter import ConstructionImporter
 
 
 class Importer:
@@ -24,3 +25,4 @@ Importer.register_importer(IngredientImporter)
 Importer.register_importer(DrinkListImporter)
 Importer.register_importer(RecipeImporter)
 Importer.register_importer(InventoryImporter)
+Importer.register_importer(ConstructionImporter)
