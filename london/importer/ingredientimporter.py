@@ -3,7 +3,7 @@ from london.importer.baseimporter import BaseImporter
 from barbados.services.logging import LogService
 from barbados.objects.ingredient import Ingredient
 from barbados.serializers import ObjectSerializer
-from barbados.factories.ingredientfactory import IngredientFactory
+from barbados.factories.ingredient import IngredientFactory
 
 
 class IngredientImporter(BaseImporter):

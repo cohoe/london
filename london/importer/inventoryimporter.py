@@ -1,6 +1,6 @@
 from .baseimporter import BaseImporter
 from barbados.services.logging import LogService
-from barbados.factories.inventoryfactory import InventoryFactory
+from barbados.factories.inventory import InventoryFactory
 from barbados.models.inventory import InventoryModel
 from barbados.serializers import ObjectSerializer
 from requests.exceptions import HTTPError
