@@ -5,7 +5,7 @@ import requests.exceptions
 import london.util
 
 
-class Construction:
+class Glassware:
 
     def __init__(self):
         pass
@@ -14,7 +14,7 @@ class Construction:
         args = self._setup_args()
         self._validate_args(args)
 
-        endpoint = "http://localhost:8080/api/v1/constructions"
+        endpoint = "http://localhost:8080/api/v1/glassware"
 
         if args.action == 'create':
             self._create(endpoint, args)
@@ -25,7 +25,7 @@ class Construction:
             self._create(endpoint, args)
 
     def _create(self, endpoint, args):
-        data = london.util.load_yaml_data_from_path('./constructions')
+        data = london.util.load_yaml_data_from_path('./glassware')
         for item in data:
             if item.get('slug') == args.slug:
                 print(item)
@@ -48,8 +48,8 @@ class Construction:
 
     @staticmethod
     def _setup_args():
-        parser = argparse.ArgumentParser(description='Manipulate constructions',
-                                         usage='amari construction <action> <slug>')
+        parser = argparse.ArgumentParser(description='Manipulate glassware',
+                                         usage='amari glassware <action> <slug>')
         parser.add_argument('action', help='action', choices=['create', 'delete', 'recreate'])
         parser.add_argument('slug', help='slug')
 
