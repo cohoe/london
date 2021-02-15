@@ -20,6 +20,8 @@ class Glassware:
             self._create(endpoint, args)
         elif args.action == 'delete':
             self._delete(endpoint, args)
+        elif args.action == 'get':
+            self._get(endpoint, args)
         else:
             self._delete(endpoint, args)
             self._create(endpoint, args)
@@ -27,14 +29,25 @@ class Glassware:
     def _create(self, endpoint, args):
         data = london.util.load_yaml_data_from_path('./glassware')
         for item in data:
-            if item.get('slug') == args.slug:
+            if item.get('slug') == args.slug or args.slug == 'all':
                 print(item)
                 result = requests.post(endpoint, json=item)
 
         return self._handle_error(result)
 
     def _delete(self, endpoint, args):
-        result = requests.delete("%s/%s" % (endpoint, args.slug))
+        if args.slug == 'all':
+            result = requests.delete(endpoint)
+        else:
+            result = requests.delete("%s/%s" % (endpoint, args.slug))
+        return self._handle_error(result)
+
+    def _get(self, endpoint, args):
+        if args.slug == 'all':
+            result = requests.get(endpoint)
+        else:
+            result = requests.get("%s/%s" % (endpoint, args.slug))
+        print(result.json())
         return self._handle_error(result)
 
     def _handle_error(self, result):
@@ -50,7 +63,7 @@ class Glassware:
     def _setup_args():
         parser = argparse.ArgumentParser(description='Manipulate glassware',
                                          usage='amari glassware <action> <slug>')
-        parser.add_argument('action', help='action', choices=['create', 'delete', 'recreate'])
+        parser.add_argument('action', help='action', choices=['create', 'delete', 'recreate', 'get'])
         parser.add_argument('slug', help='slug')
 
         return parser.parse_args(sys.argv[2:])
