@@ -2,6 +2,8 @@ import os
 import sys
 import yaml
 import jinja2
+import json
+import datetime
 
 # Constants
 pretty_fractions = {
@@ -136,3 +138,13 @@ def load_yaml_data_from_path(path, extension='.yaml'):
     if not result_data:
         raise Exception("No results found?")
     return result_data
+
+
+# https://stackoverflow.com/questions/53757981/converting-yaml-to-jsontypeerror-object-of-type-date-is-not-json-serializabl
+def DateEncoder(obj):
+    if isinstance(obj, (datetime.datetime, datetime.date)):
+        return obj.isoformat()
+
+
+def to_json(data):
+    return json.loads(json.dumps(data, default=DateEncoder))

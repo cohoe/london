@@ -29,8 +29,8 @@ class Recipe:
         data = london.util.load_yaml_data_from_path('./recipes')
         for item in data:
             if item.get('slug') == args.slug:
-                print(item)
-                result = requests.post(endpoint, json=item)
+                print(london.util.to_json(item))
+                result = requests.post(endpoint, json=london.util.to_json(item))
 
         return self._handle_error(result)
 
