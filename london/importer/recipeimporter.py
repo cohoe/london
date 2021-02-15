@@ -1,7 +1,7 @@
 from requests import HTTPError
 from .baseimporter import BaseImporter
 from barbados.objects.text import Slug
-from barbados.factories.cocktailfactory import CocktailFactory
+from barbados.factories.cocktail import CocktailFactory
 from barbados.services.logging import LogService
 from barbados.serializers import ObjectSerializer
 from barbados.exceptions import ValidationException
@@ -26,7 +26,7 @@ class RecipeImporter(BaseImporter):
             slug = Slug(cocktail['display_name'])
             try:
                 LogService.info("Working %s" % slug)
-                c = CocktailFactory.raw_to_obj(cocktail, slug)
+                c = CocktailFactory.raw_to_obj(cocktail)
             except KeyError as e:
                 LogService.error("Something has bad data!")
                 LogService.error(cocktail)
