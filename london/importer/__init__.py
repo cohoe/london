@@ -1,5 +1,5 @@
 from .ingredientimporter import IngredientImporter
-from .drinklistimporter import DrinkListImporter
+from .listimporter import DrinkListImporter
 from .recipeimporter import RecipeImporter
 from .inventoryimporter import InventoryImporter
 from .constructionimporter import ConstructionImporter
