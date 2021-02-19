@@ -1,4 +1,5 @@
 import requests
+from time import sleep
 from london.importer.baseimporter import BaseImporter
 from barbados.services.logging import LogService
 from barbados.objects.ingredient import Ingredient
@@ -50,10 +51,13 @@ class IngredientImporter(BaseImporter):
         [LogService.error("Failed to add %s" % i.slug) for i in counts.get('fail')]
 
         # Refresh all indexes
+        # There seems to be a problem where I hit ElasticSearch too quickly
+        # and don't get all of the indexes in time. Manifested as 9 indexes
+        # instead of 11.
+        sleep(2)
         self._refresh_indexes(endpoint=endpoint)
 
     def _refresh_indexes(self, endpoint):
-        # @TODO need a sane library to make URLs without double slashes.
         search_url = "%s/search" % endpoint
 
         parameters = {'kind': 'index'}
