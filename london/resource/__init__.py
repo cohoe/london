@@ -11,7 +11,7 @@ class Resource:
             result = requests.get(endpoint)
         else:
             result = requests.get("%s/%s" % (endpoint, args.slug))
-        # print(result.json())
+        print(result.json())
         Resource._handle_error(result)
 
     @staticmethod
