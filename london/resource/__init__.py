@@ -51,5 +51,5 @@ class Resource:
         except requests.exceptions.RequestException as e:
             LogService.error("Error handling URL: %i" % result.status_code)
             LogService.error(result.request.body)
-            LogService.error(result.text)
+            LogService.error(result.json().get('message'))
             return 0
