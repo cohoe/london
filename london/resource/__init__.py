@@ -18,7 +18,7 @@ class Resource:
         for item in data:
             if item.get('slug') == args.slug or args.slug == 'all':
                 print(item)
-                result = requests.post(endpoint, json=item)
+                result = requests.post(endpoint, json=london.util.to_json(item))
 
         return Resource._handle_error(result)
 
