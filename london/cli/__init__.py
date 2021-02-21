@@ -12,9 +12,6 @@ class Cli(object):
                                          usage='london <command> [<args>]')
         parser.add_argument('command', choices=self._get_command_list(),
                             help='Subcommand to run.')
-        # @TODO Version
-        parser.add_argument('-v', '--version', action='version',
-                            version='Foo bar baz')
         args = parser.parse_args(sys.argv[1:2])
 
         if args.command == 'help':
