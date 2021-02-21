@@ -1,17 +1,18 @@
 import london.util
 import requests
 from barbados.services.logging import LogService
+import json
 
 
 class Resource:
     @staticmethod
     def get(endpoint, args):
-        LogService.info("Getting %s" % args.slug)
+        LogService.debug("Getting %s" % args.slug)
         if args.slug == 'all':
             result = requests.get(endpoint)
         else:
             result = requests.get("%s/%s" % (endpoint, args.slug))
-        print(result.json())
+        print(json.dumps(result.json()))
         Resource._handle_error(result)
 
     @staticmethod
