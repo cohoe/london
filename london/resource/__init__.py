@@ -53,4 +53,5 @@ class Resource:
             LogService.error("Error handling URL: %i" % result.status_code)
             LogService.error(result.request.body)
             LogService.error(result.json().get('message'))
+            LogService.error(result.json().get('details'))
             return 0
