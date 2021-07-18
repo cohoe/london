@@ -1,6 +1,0 @@
-barbados
-python-editor
-PyYAML
-jinja2
-ruamel.yaml
-requests
